@@ -2,6 +2,7 @@ import apple from "./assets/apple.svg";
 import googlePlay from "./assets/google-play.svg";
 import creatorImage from "./assets/ritom.png";
 import ananta from "./assets/logo.png";
+import eduShelf from "./assets/edu_shelf.png";
 import { ArrowRight, Twitter, Instagram, Linkedin } from "lucide-react";
 import "./App.css";
 import { Analytics } from "@vercel/analytics/react";
@@ -10,9 +11,9 @@ import { Analytics } from "@vercel/analytics/react";
 
 export default function Ananta() {
   return (
-    <main className="min-h-screen bg-[#07070a] text-slate-100 font-inter py-12 px-6 lg:px-20">
+    <main className="min-h-screen bg-[#07070a] text-slate-100 font-inter pt-28 px-6 lg:px-20">
       {/* Top navigation */}
-      <header className="flex items-center justify-between mb-10">
+      <header className="fixed top-0 left-0 w-full z-50 bg-[#07070a]/90 backdrop-blur-sm border-b border-slate-800 flex items-center justify-between px-6 lg:px-20 py-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg overflow-hidden shadow-2xl flex items-center justify-center">
             <img
@@ -67,7 +68,7 @@ export default function Ananta() {
       {/* Hero / About */}
       <section
         id="about"
-        className="max-w-6xl mx-auto mb-16 flex flex-col-reverse lg:flex-row items-center gap-10"
+        className="mx-auto mb-16 flex flex-col-reverse lg:flex-row items-center gap-10"
       >
         {/* Text */}
         <div className="lg:flex-1">
@@ -99,26 +100,27 @@ export default function Ananta() {
       </section>
 
       {/* Apps Section */}
-      <section id="apps" className="max-w-6xl mx-auto mb-20">
+      <section id="apps" className="mx-auto mb-20">
         <h2 className="text-2xl font-bold mb-6">Our Apps</h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-fr items-stretch">
           <AppCard
             title="SwiftChat"
             desc="Fast, private messaging for everyone."
-            storeLinks
+            showStoreLinks
           />
 
           <AppCard
             title="NoteSpace"
             desc="Your ideas, synced and secure."
-            storeLinks
+            showStoreLinks
           />
 
           <AppCard
-            title="FitTrack"
-            desc="Stay healthy with smart tracking."
-            storeLinks
+            title="Edu Shelf"
+            desc="Get your favourite books at your doorstep"
+            img={eduShelf}
+            showStoreLinks
           />
 
           <ShowMoreCard label="Show More Apps" />
@@ -126,7 +128,7 @@ export default function Ananta() {
       </section>
 
       {/* Shop Section */}
-      <section id="shop" className="max-w-6xl mx-auto mb-24">
+      <section id="shop" className="mx-auto mb-24">
         <h2 className="text-2xl font-bold mb-6">Shop Our Gear</h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -143,7 +145,7 @@ export default function Ananta() {
       </section>
 
       {/* Footer */}
-      <footer className="max-w-6xl mx-auto border-t border-slate-800 pt-8 pb-6">
+      <footer className="mx-auto border-t border-slate-800 pt-8 pb-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-6">
             <a href="#apps" className="hover:underline">
@@ -195,37 +197,49 @@ function Badge({ emoji, title }: { emoji: string; title: string }) {
 function AppCard({
   title,
   desc,
-  storeLinks = false,
+  img = null,
+  showStoreLinks = false,
+  appleLink = "",
+  googlePlayLink = "",
 }: {
   title: string;
   desc: string;
-  storeLinks?: boolean;
+  img?: string | null;
+  showStoreLinks?: boolean;
+  appleLink?: string;
+  googlePlayLink?: string;
 }) {
   return (
-    <article className="rounded-2xl p-6 bg-gradient-to-b from-[#0b0b0d] to-[#0b0b0f] border border-slate-800 shadow-xl hover:translate-y-[-6px] hover:shadow-[0_10px_40px_rgba(99,102,241,0.08)] transition-transform">
-      <div className="flex items-start gap-4">
-        <div className="w-14 h-14 rounded-lg bg-gradient-to-br from-indigo-600 to-purple-500 flex items-center justify-center text-black font-bold">
-          {title.charAt(0)}
-        </div>
-        <div>
-          <h3 className="text-lg font-semibold">{title}</h3>
-          <p className="mt-1 text-slate-400 text-sm">{desc}</p>
+    <article className="h-full flex flex-col justify-between rounded-2xl p-6 bg-gradient-to-b from-[#0b0b0d] to-[#0b0b0f] border border-slate-800 shadow-xl hover:-translate-y-1.5 hover:shadow-[0_10px_40px_rgba(99,102,241,0.08)] transition-transform">
+      <div className="flex-1">
+        <div className="flex items-center gap-4">
+          {img != null ? (
+            <img src={img} alt={title} className="w-14 h-14 rounded-lg" />
+          ) : (
+            <div className="w-14 h-14 rounded-lg bg-gradient-to-br from-indigo-600 to-purple-500 flex items-center justify-center text-black font-bold text-xl">
+              {title.charAt(0)}
+            </div>
+          )}
+          <div>
+            <h3 className="text-lg font-semibold">{title}</h3>
+            <p className="mt-1 text-slate-400 text-sm">{desc}</p>
+          </div>
         </div>
       </div>
-
-      {storeLinks && (
-        <div className="mt-6 flex gap-3">
+      {showStoreLinks && (
+        <div className="mt-6 flex gap-3 flex-wrap max-w-[90%]">
           <a
-            href="#"
-            className="flex items-center gap-2 px-4 py-2 rounded-md bg-slate-900/50 border border-slate-700 text-sm shadow-sm hover:scale-[1.02]"
+            href={appleLink}
+            target="_blank"
+            className="flex items-center gap-2 px-3 py-2 rounded-md bg-slate-900/50 border border-slate-700 text-sm shadow-sm hover:scale-[1.02]"
           >
             <img src={apple} alt="app store" className="w-4 h-4" />
             App Store
           </a>
 
           <a
-            href="#"
-            className="flex items-center gap-2 px-4 py-2 rounded-md bg-slate-900/50 border border-slate-700 text-sm shadow-sm hover:scale-[1.02]"
+            href={googlePlayLink}
+            className="flex items-center gap-2 px-3 py-2 rounded-md bg-slate-900/50 border border-slate-700 text-sm shadow-sm hover:scale-[1.02]"
           >
             <img src={googlePlay} alt="google play" className="w-4 h-4" />
             Google Play
@@ -238,7 +252,7 @@ function AppCard({
 
 function ShowMoreCard({ label }: { label: string }) {
   return (
-    <button className="rounded-2xl p-6 flex flex-col items-start justify-center bg-gradient-to-br from-transparent to-slate-900/20 border border-dashed border-slate-800 hover:shadow-[0_12px_40px_rgba(139,92,246,0.06)] transition-shadow">
+    <button className="h-full rounded-2xl p-6 flex flex-col items-start justify-between bg-gradient-to-br from-transparent to-slate-900/20 border border-dashed border-slate-800 hover:shadow-[0_12px_40px_rgba(139,92,246,0.06)] transition-shadow">
       <span className="text-lg font-medium opacity-90">{label}</span>
       <span className="mt-3 inline-flex items-center gap-2 text-sm opacity-70">
         View all <ArrowRight size={14} />
@@ -261,7 +275,7 @@ function ProductCard({
   if (showMore) {
     return (
       <button
-        className={`w-full rounded-2xl p-5 flex flex-col justify-between bg-gradient-to-b from-[#06060a] to-[#0b0b0d] border border-slate-800 shadow-md hover:-translate-y-2 transition-transform h-full ${className}`}
+        className={`w-full h-full rounded-2xl p-5 flex flex-col justify-between bg-gradient-to-b from-[#06060a] to-[#0b0b0d] border border-slate-800 shadow-md hover:-translate-y-2 transition-transform ${className}`}
       >
         <span className="text-lg font-medium opacity-90">
           Show More Products
@@ -275,7 +289,7 @@ function ProductCard({
 
   return (
     <div
-      className={`rounded-2xl p-5 bg-gradient-to-b from-[#06060a] to-[#0b0b0d] border border-slate-800 shadow-md hover:-translate-y-2 transition-transform h-full ${className}`}
+      className={`h-full rounded-2xl p-5 flex flex-col justify-between bg-gradient-to-b from-[#06060a] to-[#0b0b0d] border border-slate-800 shadow-md hover:-translate-y-2 transition-transform ${className}`}
     >
       <div className="flex items-center gap-4">
         <div className="w-14 h-14 rounded-lg bg-slate-900/40 flex items-center justify-center text-slate-300">
